@@ -51,9 +51,8 @@ passport.use(
       callbackURL: "http://localhost:3000/auth/google/secrets",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
-    function (accessToken, refreshToken, profile, cb) {
-      const { id, displayName } = profile;
-      User.findOrCreate({ googleId: id, username: displayName }, (err, user) => {
+    (profile, cb) => {
+      User.findOrCreate({ googleId: profile.id }, (err, user) => {
         return cb(err, user);
       });
     }
@@ -67,9 +66,9 @@ passport.use(
       clientSecret: FACEBOOK_SECRET,
       callbackURL: "http://localhost:3000/auth/facebook/secrets",
     },
-    function (accessToken, refreshToken, profile, done) {
+    (profile, done) => {
       const { id, displayName } = profile;
-      User.findOrCreate({ facebookId: id, username: displayName }, (err, user) => {
+      User.findOrCreate({ facebookId: id, username: displayName}, (err, user) => {
         if (err) {
           return done(err);
         }

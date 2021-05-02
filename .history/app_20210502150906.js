@@ -52,13 +52,31 @@ passport.use(
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     function (accessToken, refreshToken, profile, cb) {
-      const { id, displayName } = profile;
-      User.findOrCreate({ googleId: id, username: displayName }, (err, user) => {
+      User.findOrCreate({ googleId: profile.id }, (err, user) => {
         return cb(err, user);
       });
     }
   )
 );
+
+// passport.use(
+//   new FacebookStrategy(
+//     {
+//       clientID: FACEBOOK_ID,
+//       clientSecret: FACEBOOK_SECRET,
+//       callbackURL: "http://localhost:3000/auth/facebook/secrets",
+//     },
+//     function (accessToken, refreshToken, profile, done) {
+//       const { id, displayName } = profile;
+//       User.findOrCreate({ facebookId: id, username: displayName}, (err, user) => {
+//         if (err) {
+//           return done(err);
+//         }
+//         done(null, user);
+//       });
+//     }
+//   )
+// );
 
 passport.use(
   new FacebookStrategy(
@@ -67,14 +85,17 @@ passport.use(
       clientSecret: FACEBOOK_SECRET,
       callbackURL: "http://localhost:3000/auth/facebook/secrets",
     },
-    function (accessToken, refreshToken, profile, done) {
+    (profile, done) => {
       const { id, displayName } = profile;
-      User.findOrCreate({ facebookId: id, username: displayName }, (err, user) => {
-        if (err) {
-          return done(err);
+      User.findOrCreate(
+        { facebookId: id, username: displayName },
+        (err, user) => {
+          if (err) {
+            return done(err);
+          }
+          done(null, user);
         }
-        done(null, user);
-      });
+      );
     }
   )
 );

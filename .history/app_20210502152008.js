@@ -52,8 +52,9 @@ passport.use(
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     function (accessToken, refreshToken, profile, cb) {
-      const { id, displayName } = profile;
-      User.findOrCreate({ googleId: id, username: displayName }, (err, user) => {
+      const { id, name } = profile,
+            { familyName, givenName } = name;
+      User.findOrCreate({ googleId: profile.id }, (err, user) => {
         return cb(err, user);
       });
     }
