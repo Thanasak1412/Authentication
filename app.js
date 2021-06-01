@@ -9,7 +9,8 @@ const express = require("express"),
   GoogleStrategy = require("passport-google-oauth20").Strategy,
   FacebookStrategy = require("passport-facebook").Strategy,
   findOrCreate = require("mongoose-findorcreate"),
-  { GOOGLE_ID, GOOGLE_SECRET, FACEBOOK_ID, FACEBOOK_SECRET } = process.env;
+  port = 3000 || process.env.PORT,
+  { GOOGLE_ID, GOOGLE_SECRET, FACEBOOK_ID, FACEBOOK_SECRET, CONNECT_URL } = process.env;
 // const bcrypt = require("bcrypt");
 
 const app = express();
@@ -28,7 +29,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/userDB", {
+mongoose.connect(CONNECT_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
@@ -198,7 +199,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-// // bcrypt
+// bcrypt
 // app.post("/register", (req, res) => {
 //   const { username, password } = req.body;
 
@@ -216,36 +217,19 @@ app.post("/login", (req, res) => {
 // app.post("/login", (req, res) => {
 //   const { username, password } = req.body;
 
-//   User.findOne({ username: username }, (err, foundUser) => {
-//     !err
-//       ? foundUser
-//         ? bcrypt.compare(password, foundUser.password, (err, result) =>
-//             result === true
-//               ? res.render("secrets")
-//               : res.render("Password is incorrect")
-//           )
-//         : res.render("Username not found")
-//       : console.log(err);
-
-//     // // if normal (คำสั่ง IF แบบปกติ)
-//     // if (!err) {
-//     //   if (foundUser) {
-//     //     bcrypt.compare(password, foundUser.password, (err, result) => {
-//     //       if (result === true) {
-//     //         res.render("secrets");
-//     //       } else {
-//     //         res.render("Password is incorrect");
-//     //       }
-//     //     });
-//     //   } else {
-//     //     res.render("Username not found");
-//     //   }
-//     // } else {
-//     //   console.log(err);
-//     // }
-//   });
+  // User.findOne({ username: username }, (err, foundUser) => {
+  //   !err
+  //     ? foundUser
+  //       ? bcrypt.compare(password, foundUser.password, (err, result) =>
+  //           result === true
+  //             ? res.render("secrets")
+  //             : res.render("Password is incorrect")
+  //         )
+  //       : res.render("Username not found")
+  //     : console.log(err);
+  // });
 // });
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+app.listen(port, () => {
+  console.log("Connect successfully");
 });

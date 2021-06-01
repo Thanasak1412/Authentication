@@ -26,6 +26,9 @@
     "passport-local-mongoose": "^6.1.0"
   },
   "devDependencies": {},
+  "engines": {
+    "node": "14.15.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
